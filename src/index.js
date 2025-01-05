@@ -7,6 +7,7 @@ import connectDb from './configs/db.js';
 import authRoute from './routes/authRoute.js';
 import userRoute from './routes/userRoute.js';
 import categoryRoute from './routes/categoryRoute.js';
+import brandRoute from './routes/brandRoute.js';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(cors());
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/categories', categoryRoute);
+app.use('/api/brands', brandRoute);
 
 const port = process.env.PORT || 5050
 
