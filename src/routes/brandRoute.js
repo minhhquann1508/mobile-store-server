@@ -6,5 +6,9 @@ const router = express.Router();
 
 router
     .post('/', brandController.createNewBrand)
+    .get('/', brandController.getAllBrands)
+    .get('/:slug', brandController.getBrandBySlug)
+    .put('/:id', brandController.updateBrand)
+    .delete('/:id', brandController.deleteBrand)
 
 export default router;
