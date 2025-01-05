@@ -4,6 +4,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import connectDb from './configs/db.js';
+import authRoute from './routes/authRoute.js';
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+app.use('/api/auth', authRoute);
 
 const port = process.env.PORT || 5050
 
