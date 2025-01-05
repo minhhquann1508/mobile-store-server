@@ -1,15 +1,28 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import cors from 'cors';
 import express from 'express';
+import bodyParser from 'body-parser';
+
+import connectDb from './configs/db.js';
+
+dotenv.config();
 
 const app = express();
 
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+const port = process.env.PORT || 5050
 
-app.listen(process.env.PORT, () =>
-  console.log(`Example app listening on port ${process.env.PORT}!`),
-);
+try {
+  await connectDb();
+  app.listen(port, () =>
+    console.log(`Server listening on port ${port}!`),
+  );
+} catch (error) {
+  console.log(error);
+}
+
+
