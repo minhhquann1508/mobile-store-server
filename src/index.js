@@ -9,6 +9,7 @@ import userRoute from './routes/userRoute.js';
 import categoryRoute from './routes/categoryRoute.js';
 import brandRoute from './routes/brandRoute.js';
 import productRoute from './routes/productRoute.js';
+import subProductRoute from './routes/subProductRoute.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api/users', userRoute);
 app.use('/api/categories', categoryRoute);
 app.use('/api/brands', brandRoute);
 app.use('/api/products', productRoute);
+app.use('/api/sub-products', subProductRoute);
 
 const port = process.env.PORT || 5050
 
