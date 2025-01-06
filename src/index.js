@@ -10,6 +10,7 @@ import categoryRoute from './routes/categoryRoute.js';
 import brandRoute from './routes/brandRoute.js';
 import productRoute from './routes/productRoute.js';
 import subProductRoute from './routes/subProductRoute.js';
+import commentRoute from './routes/commentRoute.js';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use('/api/categories', categoryRoute);
 app.use('/api/brands', brandRoute);
 app.use('/api/products', productRoute);
 app.use('/api/sub-products', subProductRoute);
+app.use('/api/comments', commentRoute);
 
 const port = process.env.PORT || 5050
 
