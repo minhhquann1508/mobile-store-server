@@ -1,4 +1,5 @@
 import ProductModel from "../models/Products.js";
+import UserModel from "../models/User.js";
 
 const productController = {};
 
@@ -180,5 +181,27 @@ productController.deleteProduct = async (req, res) => {
         });
     }
 }
+
+productController.addToWishlist = async (req, res) => {
+    try {
+        const { userId } = req.user;
+        const { productId } = req.body;
+        const { wishList } = await UserModel.findById(userId);
+        const index = wishList.findIndex(item => item === productId);
+        if (index === -1) {
+            wishList.push(productId);
+            await UserModel.findByIdAndUpdate(userId, { wishList }, { new: true });
+            res.status(201).json({
+                message: 'Thêm vào danh sách yêu thích thành công',
+                data: wishList
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+            data: null
+        });
+    }
+};
 
 export default productController;
