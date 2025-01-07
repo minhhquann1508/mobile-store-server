@@ -6,6 +6,7 @@ import checkPermission from '../middleware/checkRole.js';
 const router = express.Router();
 
 router
+    .post('/', verifyToken, checkPermission('admin'), userController.createAdminUser)
     .get('/', verifyToken, checkPermission('admin'), userController.getAllUsers)
     .get('/current-user', verifyToken, userController.getCurrentUser)
     .put('/update-user', verifyToken, userController.updateUser)

@@ -2,6 +2,34 @@ import UserModel from '../models/User.js';
 
 const userController = {};
 
+userController.createAdminUser = async (req, res) => {
+    try {
+        const { name, email, password, phone } = req.body;
+        if (!name || !email || !password || !phone)
+            return res.status(400).json({
+                message: 'Cần điền đủ thông tin',
+                data: null
+            });
+        const isEmailAvailable = await UserModel.findOne({ email });
+
+        if (isEmailAvailable)
+            return res.status(400).json({
+                message: 'Email này đã được đăng ký',
+                data: null
+            });
+        const user = await UserModel.create({ name, email, password, phone, role: 'admin' });
+        return res.status(201).json({
+            message: 'Tạo tài khoản admin thành công',
+            data: user
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+            data: null
+        });
+    }
+}
+
 userController.getAllUsers = async (req, res) => {
     try {
         const users = await UserModel.find();

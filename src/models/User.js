@@ -25,6 +25,21 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String,
     },
+    cart: {
+        type: [
+            {
+                product: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Product',
+                    required: true
+                },
+                quantity: {
+                    type: Number,
+                    required: true
+                }
+            }
+        ]
+    },
     wishlist: {
         type: [String],
         default: []
