@@ -9,6 +9,9 @@ const SubProductSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    images: {
+        type: [String],
+    },
     storage: {
         type: String
     },

@@ -1,5 +1,6 @@
 import ProductModel from "../models/Products.js";
 import UserModel from "../models/User.js";
+import SubProductModel from '../models/SubProducts.js';
 
 const productController = {};
 
@@ -132,6 +133,65 @@ productController.getProductById = async (req, res) => {
     }
 };
 
+productController.addToCart = async (req, res) => {
+    try {
+        const { userId } = req.user;
+        const { subProductId, quantity } = req.body;
+
+        if (!subProductId || !quantity || quantity <= 0) {
+            return res.status(400).json({
+                message: 'Vui lòng cung cấp thông tin sản phẩm và số lượng hợp lệ',
+                data: null
+            });
+        }
+
+        const subProduct = await SubProductModel.findById(subProductId);
+        if (!subProduct) {
+            return res.status(404).json({
+                message: 'Sản phẩm không tồn tại',
+                data: null
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                message: 'Người dùng không tồn tại',
+                data: null
+            });
+        }
+
+        const cart = [...user.cart];
+        const existingCartItem = cart.find(item =>
+            item.product.toString() === subProduct.product.toString() &&
+            item.subProduct.toString() === subProductId.toString()
+        );
+
+        if (existingCartItem) {
+            existingCartItem.quantity += quantity;
+        } else {
+            cart.push({
+                product: subProduct.product,
+                subProduct: subProductId,
+                quantity: quantity
+            });
+        }
+
+        user.cart = cart;
+        await user.save();
+
+        return res.status(200).json({
+            message: 'Cập nhật giỏ hàng thành công',
+            data: user.cart
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+            data: null
+        });
+    }
+};
+
 productController.updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
@@ -185,11 +245,11 @@ productController.deleteProduct = async (req, res) => {
 productController.addToWishlist = async (req, res) => {
     try {
         const { userId } = req.user;
-        const { productId } = req.body;
+        const { subProductId } = req.body;
         const { wishList } = await UserModel.findById(userId);
-        const index = wishList.findIndex(item => item === productId);
+        const index = wishList.findIndex(item => item === subProductId);
         if (index === -1) {
-            wishList.push(productId);
+            wishList.push(subProductId);
             await UserModel.findByIdAndUpdate(userId, { wishList }, { new: true });
             res.status(201).json({
                 message: 'Thêm vào danh sách yêu thích thành công',
